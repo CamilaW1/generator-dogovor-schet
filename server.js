@@ -117,7 +117,7 @@ function makeInvoice(data){
         fixedCell(ILDAR.ks,3206,{size:15})
       ]}),
       new TableRow({children:[
-        fixedCell(\`ИНН \${ILDAR.inn}     КПП \${ILDAR.kpp}\`,6100,{size:15}),
+        fixedCell(`ИНН ${ILDAR.inn}     КПП ${ILDAR.kpp}`,6100,{size:15}),
         fixedCell("Сч. №",900,{size:15}),
         fixedCell(ILDAR.rs,3206,{size:15})
       ]}),
@@ -129,12 +129,12 @@ function makeInvoice(data){
 
   const buyerLines=[
     data.customerShort||"",
-    data.customerFull?\`Полное наименование: \${data.customerFull}\`:"",
-    data.customerAddress?\`Юридический адрес: \${data.customerAddress}\`:"",
-    [data.customerInn&&\`ИНН \${data.customerInn}\`,data.customerKpp&&\`КПП \${data.customerKpp}\`,data.customerOgrn&&\`ОГРН \${data.customerOgrn}\`].filter(Boolean).join(", "),
-    [data.customerOkpo&&\`ОКПО \${data.customerOkpo}\`,data.customerOkved&&\`ОКВЭД \${data.customerOkved}\`,data.customerOkato&&\`ОКАТО \${data.customerOkato}\`,data.customerOktmo&&\`ОКТМО \${data.customerOktmo}\`].filter(Boolean).join(", "),
-    data.customerRs?\`р/с \${data.customerRs}\${data.customerBank?\` в \${data.customerBank}\`:""}\`:"",
-    [data.customerKs&&\`к/с \${data.customerKs}\`,data.customerBik&&\`БИК \${data.customerBik}\`].filter(Boolean).join(", ")
+    data.customerFull?`Полное наименование: ${data.customerFull}`:"",
+    data.customerAddress?`Юридический адрес: ${data.customerAddress}`:"",
+    [data.customerInn&&`ИНН ${data.customerInn}`,data.customerKpp&&`КПП ${data.customerKpp}`,data.customerOgrn&&`ОГРН ${data.customerOgrn}`].filter(Boolean).join(", "),
+    [data.customerOkpo&&`ОКПО ${data.customerOkpo}`,data.customerOkved&&`ОКВЭД ${data.customerOkved}`,data.customerOkato&&`ОКАТО ${data.customerOkato}`,data.customerOktmo&&`ОКТМО ${data.customerOktmo}`].filter(Boolean).join(", "),
+    data.customerRs?`р/с ${data.customerRs}${data.customerBank?` в ${data.customerBank}`:""}`:"",
+    [data.customerKs&&`к/с ${data.customerKs}`,data.customerBik&&`БИК ${data.customerBik}`].filter(Boolean).join(", ")
   ].filter(Boolean);
 
   const itemWidths=[500,5200,800,700,1450,1556];
@@ -195,8 +195,8 @@ function makeInvoice(data){
     children:[
       bankTable,
       p("",{after:90}),
-      p([text(\`Счет на оплату №\${data.invoiceNumber||""} от \${ruDate(data.invoiceDate)}\`,true,28)],{align:AlignmentType.LEFT,after:100,line:260}),
-      p([text("Поставщик: ",false,17),text(\`\${ILDAR.name}, ИНН \${ILDAR.inn}, \${ILDAR.address}\`,true,17)],{align:AlignmentType.LEFT,after:70,line:230}),
+      p([text(`Счет на оплату №${data.invoiceNumber||""} от ${ruDate(data.invoiceDate)}`,true,28)],{align:AlignmentType.LEFT,after:100,line:260}),
+      p([text("Поставщик: ",false,17),text(`${ILDAR.name}, ИНН ${ILDAR.inn}, ${ILDAR.address}`,true,17)],{align:AlignmentType.LEFT,after:70,line:230}),
       p([text("Покупатель: ",false,17),text(buyerLines[0]||"",true,17)],{align:AlignmentType.LEFT,after:20,line:230}),
       ...buyerLines.slice(1).map(x=>p([text("                 "+x,false,16)],{align:AlignmentType.LEFT,after:15,line:220})),
       p("",{after:90}),
@@ -204,8 +204,8 @@ function makeInvoice(data){
       p("",{after:70}),
       totalsTable,
       p("",{after:70}),
-      p([text(\`Всего наименований \${items.length}, на сумму \${fmt(total)} руб.\`,false,17)],{align:AlignmentType.LEFT,after:35,line:230}),
-      p([text(\`Сумма прописью: \${numberToWordsRub(total)}\`,true,18)],{align:AlignmentType.LEFT,after:140,line:230}),
+      p([text(`Всего наименований ${items.length}, на сумму ${fmt(total)} руб.`,false,17)],{align:AlignmentType.LEFT,after:35,line:230}),
+      p([text(`Сумма прописью: ${numberToWordsRub(total)}`,true,18)],{align:AlignmentType.LEFT,after:140,line:230}),
       new Table({
         width:{size:contentWidth,type:WidthType.DXA},
         columnWidths:[2600,2700,2700,2206],
@@ -237,23 +237,23 @@ function makeContract(data){
   const contentWidth=10206;
 
   const workList=items.map((it,idx)=>
-    p(\`\${idx+1}) \${it.description||""}; количество: \${it.qty||0} \${it.unit||"шт"}; цена: \${fmt(it.price)} руб.; сумма: \${fmt((it.qty||0)*(it.price||0))} руб.\`,{
+    p(`${idx+1}) ${it.description||""}; количество: ${it.qty||0} ${it.unit||"шт"}; цена: ${fmt(it.price)} руб.; сумма: ${fmt((it.qty||0)*(it.price||0))} руб.`,{
       align:AlignmentType.JUSTIFIED,after:35,line:255
     })
   );
 
   const customerReq=[
     data.customerShort||"",
-    data.customerAddress?\`Юр. адрес: \${data.customerAddress}\`:"",
-    [data.customerInn&&\`ИНН \${data.customerInn}\`,data.customerKpp&&\`КПП \${data.customerKpp}\`].filter(Boolean).join(" / "),
-    data.customerOgrn?\`ОГРН: \${data.customerOgrn}\`:"",
-    data.customerRs?\`р/с: \${data.customerRs}\`:"",
-    data.customerBank?\`Банк: \${data.customerBank}\`:"",
-    data.customerKs?\`к/с: \${data.customerKs}\`:"",
-    data.customerBik?\`БИК: \${data.customerBik}\`:""
+    data.customerAddress?`Юр. адрес: ${data.customerAddress}`:"",
+    [data.customerInn&&`ИНН ${data.customerInn}`,data.customerKpp&&`КПП ${data.customerKpp}`].filter(Boolean).join(" / "),
+    data.customerOgrn?`ОГРН: ${data.customerOgrn}`:"",
+    data.customerRs?`р/с: ${data.customerRs}`:"",
+    data.customerBank?`Банк: ${data.customerBank}`:"",
+    data.customerKs?`к/с: ${data.customerKs}`:"",
+    data.customerBik?`БИК: ${data.customerBik}`:""
   ].filter(Boolean).map(x=>p(x,{align:AlignmentType.LEFT,size:17,after:25,line:220}));
 
-  const intro=\`\${ILDAR.name}, действующий на основании регистрации в качестве индивидуального предпринимателя, ИНН \${ILDAR.inn}, ОГРНИП \${ILDAR.ogrnip}, именуемый в дальнейшем «Исполнитель», с одной стороны, и \${data.customerShort||"____________________________"}\${data.representative?\`, в лице \${data.representativeTitle||""} \${data.representative}\`:""}, именуемый в дальнейшем «Заказчик», с другой стороны, а совместно именуемые «Стороны», заключили настоящий договор о нижеследующем:\`;
+  const intro=`${ILDAR.name}, действующий на основании регистрации в качестве индивидуального предпринимателя, ИНН ${ILDAR.inn}, ОГРНИП ${ILDAR.ogrnip}, именуемый в дальнейшем «Исполнитель», с одной стороны, и ${data.customerShort||"____________________________"}${data.representative?`, в лице ${data.representativeTitle||""} ${data.representative}`:""}, именуемый в дальнейшем «Заказчик», с другой стороны, а совместно именуемые «Стороны», заключили настоящий договор о нижеследующем:`;
 
   return new Document({sections:[{
     properties:{
@@ -263,7 +263,7 @@ function makeContract(data){
       }
     },
     children:[
-      p([text(\`ДОГОВОР № \${data.contractNumber||"________"}\`,true,27)],{align:AlignmentType.CENTER,after:80,line:260}),
+      p([text(`ДОГОВОР № ${data.contractNumber||"________"}`,true,27)],{align:AlignmentType.CENTER,after:80,line:260}),
       new Table({
         width:{size:contentWidth,type:WidthType.DXA},
         columnWidths:[5103,5103],
@@ -278,7 +278,7 @@ function makeContract(data){
       heading("1. ПРЕДМЕТ ДОГОВОРА"),
       p("1.1. Заказчик поручает, а Исполнитель принимает на себя обязательство по изготовлению, покраске, доставке и монтажу металлических конструкций.",{after:45}),
       ...workList,
-      p(\`1.2. Объект работ: \${data.workAddress||"____________________________________________"}.\`,{after:45}),
+      p(`1.2. Объект работ: ${data.workAddress||"____________________________________________"}.`,{after:45}),
       p("1.3. Заказчик принимает и оплачивает выполненные Исполнителем работы.",{after:70}),
       heading("2. ОБЯЗАТЕЛЬСТВА СТОРОН"),
       p("2.1. Заказчик обязуется:",{after:35}),
@@ -289,9 +289,9 @@ function makeContract(data){
       p("2.2.1. Выполнить лично и своими материалами все работы в сроки, указанные в п. 5.1 настоящего договора.",{after:35}),
       p("2.2.2. Обеспечить надлежащее качество выполненных работ.",{after:70}),
       heading("3. ЦЕНА ДОГОВОРА И ПОРЯДОК РАСЧЕТОВ"),
-      p(\`3.1. Цена настоящего договора составляет \${fmt(total)} руб.\`,{after:35}),
-      p(\`3.2. Заказчик выплачивает Исполнителю аванс в размере \${data.advancePercent||0}% — \${fmt(adv)} руб. для приобретения материалов, изготовления и доставки.\`,{after:35}),
-      p(\`3.3. Окончательная оплата оставшейся суммы \${fmt(bal)} руб. производится в день приема монтажа и подписания Акта приемки-сдачи.\`,{after:35}),
+      p(`3.1. Цена настоящего договора составляет ${fmt(total)} руб.`,{after:35}),
+      p(`3.2. Заказчик выплачивает Исполнителю аванс в размере ${data.advancePercent||0}% — ${fmt(adv)} руб. для приобретения материалов, изготовления и доставки.`,{after:35}),
+      p(`3.3. Окончательная оплата оставшейся суммы ${fmt(bal)} руб. производится в день приема монтажа и подписания Акта приемки-сдачи.`,{after:35}),
       p("3.4. Оплата производится путем безналичного платежа на расчетный счет Исполнителя.",{after:35}),
       p("3.5. В случае задержки окончательной оплаты Заказчик выплачивает Исполнителю неустойку в размере 0,05% от суммы задолженности за каждый день просрочки платежа.",{after:35}),
       p("3.6. Дополнительные виды работ, выявившиеся в процессе выполнения работ, оформляются актами и дополнительными сметами.",{after:70}),
@@ -300,13 +300,13 @@ function makeContract(data){
       p("4.2. Меры ответственности сторон, не предусмотренные в настоящем договоре, применяются в соответствии с законодательством Российской Федерации.",{after:35}),
       p("4.3. Спорные ситуации разрешаются путем переговоров между Заказчиком и Исполнителем.",{after:70}),
       heading("5. СРОКИ ИСПОЛНЕНИЯ РАБОТ"),
-      p(\`5.1. Изготовление металлических конструкций должно быть выполнено Исполнителем в течение \${data.workDays||40} рабочих дней с момента поступления аванса на расчетный счет Исполнителя.\`,{after:35}),
+      p(`5.1. Изготовление металлических конструкций должно быть выполнено Исполнителем в течение ${data.workDays||40} рабочих дней с момента поступления аванса на расчетный счет Исполнителя.`,{after:35}),
       p("5.2. В случае задержки сдачи работ по настоящему договору Исполнитель выплачивает Заказчику неустойку в размере 0,05% от общей стоимости работ за каждый день просрочки.",{after:70}),
       heading("6. УСЛОВИЯ ИЗМЕНЕНИЯ И РАСТОРЖЕНИЯ ДОГОВОРА"),
       p("6.1. Настоящий договор может быть расторгнут по соглашению Сторон либо в иных случаях, предусмотренных законодательством Российской Федерации.",{after:35}),
       p("6.2. Любые изменения и дополнения действительны, если они совершены в письменной форме и подписаны обеими Сторонами.",{after:70}),
       heading("7. ГАРАНТИЙНЫЕ ОБЯЗАТЕЛЬСТВА"),
-      p(\`7.1. Гарантийный срок на выполненные работы составляет \${data.warrantyMonths||12} месяцев.\`,{after:35}),
+      p(`7.1. Гарантийный срок на выполненные работы составляет ${data.warrantyMonths||12} месяцев.`,{after:35}),
       p("7.2. Гарантия не распространяется на механические повреждения, возникшие после приемки по вине Заказчика или третьих лиц, а также вследствие нарушения правил эксплуатации.",{after:70}),
       heading("8. ВСТУПЛЕНИЕ В СИЛУ ДОГОВОРА"),
       p("8.1. Договор вступает в силу с момента его подписания и действует до полного исполнения сторонами всех обязательств.",{after:35}),
@@ -323,13 +323,13 @@ function makeContract(data){
             children:[
               p([text("Исполнитель:",true,18)],{align:AlignmentType.LEFT,after:50}),
               p(ILDAR.name,{align:AlignmentType.LEFT,size:17,after:25}),
-              p(\`ИНН \${ILDAR.inn}\`,{align:AlignmentType.LEFT,size:17,after:25}),
-              p(\`ОГРНИП \${ILDAR.ogrnip}\`,{align:AlignmentType.LEFT,size:17,after:25}),
-              p(\`Адрес: \${ILDAR.address}\`,{align:AlignmentType.LEFT,size:17,after:25}),
-              p(\`р/с \${ILDAR.rs}\`,{align:AlignmentType.LEFT,size:17,after:25}),
-              p(\`Банк: \${ILDAR.bank}\`,{align:AlignmentType.LEFT,size:17,after:25}),
-              p(\`к/с \${ILDAR.ks}\`,{align:AlignmentType.LEFT,size:17,after:25}),
-              p(\`БИК \${ILDAR.bik}\`,{align:AlignmentType.LEFT,size:17,after:100}),
+              p(`ИНН ${ILDAR.inn}`,{align:AlignmentType.LEFT,size:17,after:25}),
+              p(`ОГРНИП ${ILDAR.ogrnip}`,{align:AlignmentType.LEFT,size:17,after:25}),
+              p(`Адрес: ${ILDAR.address}`,{align:AlignmentType.LEFT,size:17,after:25}),
+              p(`р/с ${ILDAR.rs}`,{align:AlignmentType.LEFT,size:17,after:25}),
+              p(`Банк: ${ILDAR.bank}`,{align:AlignmentType.LEFT,size:17,after:25}),
+              p(`к/с ${ILDAR.ks}`,{align:AlignmentType.LEFT,size:17,after:25}),
+              p(`БИК ${ILDAR.bik}`,{align:AlignmentType.LEFT,size:17,after:100}),
               p("________________ / Вруцкий И.А.",{align:AlignmentType.LEFT,size:17,after:0})
             ]
           }),
