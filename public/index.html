@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Генератор договора и счёта</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <div class="eyebrow">ГЕНЕРАТОР ДОКУМЕНТОВ</div>
+      <h1>Договор и счёт</h1>
+      <p>Данные Ильдара уже заполнены автоматически. Нужно заполнить только Заказчика и заказ.</p>
+    </div>
+  </header>
+
+  <main class="wrap main">
+    <section class="card supplier-card">
+      <div class="section-title">
+        <span>✓</span>
+        <div>
+          <h2>Исполнитель — заполнено автоматически</h2>
+          <p>Эти данные используются во всех создаваемых документах.</p>
+        </div>
+      </div>
+      <div class="supplier-grid">
+        <div><small>Исполнитель</small><strong>ИП Вруцкий Ильдар Анатольевич</strong></div>
+        <div><small>ИНН</small><strong>772151379194</strong></div>
+        <div><small>ОГРНИП</small><strong>310774619600480</strong></div>
+        <div><small>Адрес</small><strong>109472, г. Москва</strong></div>
+        <div><small>Банк</small><strong>ПАО СБЕРБАНК г. МОСКВА</strong></div>
+        <div><small>БИК</small><strong>044525225</strong></div>
+        <div><small>р/с</small><strong>40802810040000032809</strong></div>
+        <div><small>к/с</small><strong>30101810400000000225</strong></div>
+      </div>
+    </section>
+
+    <form id="form">
+      <section class="card">
+        <div class="section-title">
+          <span>1</span>
+          <div><h2>Заказчик</h2><p>Введите данные клиента один раз.</p></div>
+        </div>
+
+        <div class="grid two">
+          <label>Краткое наименование
+            <input name="customerShort" placeholder='ООО «Название»' required>
+          </label>
+          <label>Полное наименование
+            <input name="customerFull" placeholder="Полное юридическое наименование">
+          </label>
+          <label>Представитель
+            <input name="representative" placeholder="Ф.И.О.">
+          </label>
+          <label>Должность
+            <input name="representativeTitle" placeholder="Генеральный директор">
+          </label>
+          <label class="span2">Юридический адрес
+            <input name="customerAddress" placeholder="Адрес">
+          </label>
+          <label>ИНН<input name="customerInn"></label>
+          <label>КПП<input name="customerKpp"></label>
+          <label>ОГРН / ОГРНИП<input name="customerOgrn"></label>
+          <label>ОКПО<input name="customerOkpo"></label>
+          <label>ОКВЭД<input name="customerOkved"></label>
+          <label>ОКАТО<input name="customerOkato"></label>
+          <label>ОКТМО<input name="customerOktmo"></label>
+          <label>Расчётный счёт<input name="customerRs"></label>
+          <label>Банк<input name="customerBank"></label>
+          <label>Корр. счёт<input name="customerKs"></label>
+          <label>БИК<input name="customerBik"></label>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-title">
+          <span>2</span>
+          <div><h2>Договор и счёт</h2><p>Номера, даты и объект работ.</p></div>
+        </div>
+
+        <div class="grid three">
+          <label>№ договора<input name="contractNumber" value="9/01"></label>
+          <label>Дата договора<input type="date" name="contractDate"></label>
+          <label>№ счёта<input name="invoiceNumber" value="7"></label>
+          <label>Дата счёта<input type="date" name="invoiceDate"></label>
+          <label class="span2">Адрес объекта
+            <input name="workAddress" placeholder="г. Москва, ул. ...">
+          </label>
+          <label>Аванс, %<input type="number" name="advancePercent" min="0" max="100" value="50"></label>
+          <label>Срок работ, рабочих дней<input type="number" name="workDays" min="1" value="40"></label>
+          <label>Гарантия, месяцев<input type="number" name="warrantyMonths" min="0" value="12"></label>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-title">
+          <span>3</span>
+          <div><h2>Работы</h2><p>Можно добавить несколько позиций. Суммы считаются автоматически.</p></div>
+        </div>
+
+        <div id="items"></div>
+        <button type="button" class="secondary" id="addItem">+ Добавить позицию</button>
+
+        <div class="totals">
+          <div><span>Итого</span><strong id="total">0 ₽</strong></div>
+          <div><span>Аванс</span><strong id="advance">0 ₽</strong></div>
+          <div><span>Остаток</span><strong id="balance">0 ₽</strong></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-title">
+          <span>4</span>
+          <div><h2>Готовые документы</h2><p>Скачайте Word-файлы или отправьте их на e-mail.</p></div>
+        </div>
+
+        <div class="grid two">
+          <label>E-mail
+            <input type="email" name="email" placeholder="name@example.com">
+          </label>
+          <div class="actions">
+            <button type="button" id="download">Скачать ZIP</button>
+            <button type="button" class="dark" id="send">Отправить на e-mail</button>
+          </div>
+        </div>
+
+        <div id="status" class="status"></div>
+      </section>
+    </form>
+  </main>
+
+  <template id="itemTemplate">
+    <div class="item-row">
+      <label class="desc">Описание
+        <input class="itemDescription" placeholder="Например: оконная решетка 2050×820 мм">
+      </label>
+      <label>Кол-во<input class="itemQty" type="number" min="0" step="1" value="1"></label>
+      <label>Ед.<input class="itemUnit" value="шт"></label>
+      <label>Цена<input class="itemPrice" type="number" min="0" step="0.01" value="0"></label>
+      <button type="button" class="remove" title="Удалить">×</button>
+    </div>
+  </template>
+
+  <script src="/app.js"></script>
+</body>
+</html>
